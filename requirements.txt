@@ -1,0 +1,7 @@
+Flask==0.8
+Werkzeug==0.8.3
+distribute==0.6.24
+pycrypto==2.6
+wsgiref==0.1.2
+requests==0.13.3
+simplejson==2.6.0

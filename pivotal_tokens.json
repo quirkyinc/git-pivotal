@@ -1,0 +1,14 @@
+{
+    "github_hook" : {
+        "github_url": "",
+        "default_api_token" : "",
+        "project_id": '',
+        "ref": "refs/heads/master",
+        "user_api_tokens": {
+            "Your Name" : {
+                "email" : "you+github@email.com",
+                "api_token": "pivotal-api-token"
+            },
+        }
+    }
+}
