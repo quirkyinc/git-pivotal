@@ -1,7 +1,8 @@
-Flask==0.8
-Werkzeug==0.8.3
-distribute==0.6.24
-pycrypto==2.6
+Flask==0.10.1
+Jinja2==2.7.2
+MarkupSafe==0.23
+Werkzeug==0.9.4
+itsdangerous==0.24
+requests==2.3.0
+simplejson==3.5.2
 wsgiref==0.1.2
-requests==0.13.3
-simplejson==2.6.0
