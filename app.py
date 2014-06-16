@@ -1,7 +1,7 @@
-import os
-import simplejson
 import requests
 import logging
+from lxml import etree
+from os import environ
 from os.path import abspath, dirname, join
 
 from flask import Flask, request
@@ -10,9 +10,18 @@ from flask import Flask, request
 app = Flask(__name__)
 app_path = abspath(dirname(__file__))
 PIVOTAL_URL = "http://www.pivotaltracker.com/services/v3/source_commits"
+XML_nodes = {
+    'source_commit': ['message', 'author', 'commit_id', 'url']
+}
 
 
 def get_api_token(email):
+    """
+    Looks at the pivotal token configuration file and returns the appropriate
+    API token associated with this email, else returns the default api token
+    specified. This is the email that will be used when displaying a commit on
+    the associated pivotal tracker ticket.
+    """
     json_file_path = abspath(join(dirname(__file__), 'pivotal_tokens.json'))
     json_result = simplejson.loads(open(json_file_path).read())
     for user, user_values in json_result.get('github_hook').get('user_api_tokens').iteritems():
@@ -22,20 +31,31 @@ def get_api_token(email):
 
 
 def form_xml_post_data(commit):
-    message = commit.get('message')
-    author = commit.get('author').get('name')
-    commit_id = commit.get('id')
-    url = commit.get('url')
-    commit_xml = "<source_commit><message>%s</message><author>%s</author><commit_id>%s</commit_id><url>%s</url></source_commit>" % (message, author, commit_id, url)
-    return commit_xml
+    """
+    Builds and returns XML for the post data to pivotal tracker.
+    "<source_commit>
+        <message>%s</message>
+        <author>%s</author>
+        <commit_id>%s</commit_id>
+        <url>%s</url>
+    </source_commit>" % (message, author, commit_id, url)
+    """
+    for key_node, nodes in XML_nodes.iteritems():
+        root = etree.Element(key_node)
+        for node in nodes:
+            child = etree.Element(node)
+            if node == 'commit_id':
+                node = 'id'
+            child.text = str(commit.get(node))
+            root.append(child)
+    return etree.tostring(root)
 
 
 @app.route('/', methods=['POST'])
 def process_hook():
     url = PIVOTAL_URL
     try:
-        payload = request.values.get('payload')
-        payload_json = simplejson.loads(payload)
+        payload_json = request.json()
         commits = payload_json.get('commits')
         if commits:
             api_token = get_api_token(commits[0].get('author').get('email'))
