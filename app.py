@@ -55,7 +55,7 @@ def form_xml_post_data(commit):
 def process_hook():
     url = PIVOTAL_URL
     try:
-        payload_json = request.json()
+        payload_json = request.json
         commits = payload_json.get('commits')
         if commits:
             api_token = get_api_token(commits[0].get('author').get('email'))

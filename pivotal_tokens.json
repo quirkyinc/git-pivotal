@@ -1,13 +1,13 @@
 {
     "github_hook" : {
-        "github_url": "",
-        "default_api_token" : "",
-        "project_id": '',
+        "github_url": "https://github.com/quirkyinc/quirky",
+        "default_api_token" : "c98a76233403b12993a551142c306543",
+        "project_id": "1002180",
         "ref": "refs/heads/master",
         "user_api_tokens": {
-            "Your Name" : {
-                "email" : "you+github@email.com",
-                "api_token": "pivotal-api-token"
+            "Nitya Oberoi" : {
+                "email" : "nitya@quirky.com",
+                "api_token": "c98a76233403b12993a551142c306543"
             },
         }
     }
