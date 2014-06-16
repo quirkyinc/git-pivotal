@@ -55,8 +55,7 @@ def form_xml_post_data(commit):
 def process_hook():
     url = PIVOTAL_URL
     try:
-        payload_json = request
-        debugger
+        payload_json = request.json()
         commits = payload_json.get('commits')
         if commits:
             api_token = get_api_token(commits[0].get('author').get('email'))
@@ -72,7 +71,8 @@ def process_hook():
             if not req:
                 logging.debug(
                     u"Commiting ticket to pivotal resulted in an error."
-                    " {} url with data {} and api_token {}".format(url, xml_data, api_token)
+                    " %s url with data %s and api_token %s",
+                    url, xml_data, api_token
                 )
     except Exception:
         logging.exception("Exception when attempting to process payload")
