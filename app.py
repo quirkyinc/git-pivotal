@@ -1,4 +1,5 @@
 import requests
+import simplejson
 import logging
 from lxml import etree
 from os import environ
@@ -55,7 +56,7 @@ def form_xml_post_data(commit):
 def process_hook():
     url = PIVOTAL_URL
     try:
-        payload_json = request.json
+        payload_json = simplejson.loads(request.data)
         commits = payload_json.get('commits')
         if commits:
             api_token = get_api_token(commits[0].get('author').get('email'))
